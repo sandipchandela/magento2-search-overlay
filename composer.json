@@ -1,0 +1,17 @@
+{
+  "name": "sandip/search-overlay",
+  "description": "Quick Search Overlay for Hyvä Theme",
+  "require": {
+    "php": ">=8.0"
+  },
+  "type": "magento2-module",
+  "version": "1.0.0",
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Sandip\\SearchOverlay\\": ""
+    }
+  }
+}

@@ -1,0 +1,99 @@
+<div x-data="searchOverlay()" class="fixed inset-0 bg-white bg-opacity-90 z-50 p-4 hidden" id="quick-search-overlay">
+    <div class="max-w-4xl mx-auto space-y-6">
+        <!-- Categories and CMS Pages -->
+        <div>
+            <h3 class="text-lg font-semibold">Matched Categories & Pages</h3>
+            <template x-for="item in matches.categories" :key="item.id">
+                <a :href="item.url" class="block text-blue-600 hover:underline" x-text="item.name"></a>
+            </template>
+            <template x-for="item in matches.pages" :key="item.id">
+                <a :href="item.url" class="block text-green-600 hover:underline" x-text="item.title"></a>
+            </template>
+        </div>
+
+        <!-- Products -->
+        <div>
+            <h3 class="text-lg font-semibold">Products</h3>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <template x-for="product in matches.products" :key="product.id">
+                    <div class="border p-2 rounded shadow">
+                        <img :src="product.image" class="w-full h-32 object-contain" />
+                        <div class="text-sm font-bold" x-text="product.name"></div>
+                        <div class="text-xs text-gray-600" x-text="product.sku"></div>
+                        <div class="text-red-600 font-semibold" x-text="product.price"></div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- Suggestions -->
+        <div>
+            <h3 class="text-lg font-semibold">Suggestions</h3>
+            <template x-for="suggestion in matches.suggestions" :key="suggestion">
+                <div @click="applySuggestion(suggestion)" class="cursor-pointer text-gray-800 hover:text-black" x-text="suggestion"></div>
+            </template>
+        </div>
+    </div>
+</div>
+
+<script>
+function searchOverlay() {
+    return {
+        matches: {
+            categories: [],
+            pages: [],
+            products: [],
+            suggestions: [],
+        },
+        applySuggestion(suggestion) {
+            // You can trigger another fetch or fill input
+            console.log('Apply suggestion:', suggestion);
+        }
+    }
+}
+</script>
+
+
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('searchOverlay', () => ({
+        matches: {
+            categories: [],
+            pages: [],
+            products: [],
+            suggestions: []
+        },
+        init() {
+            const input = document.querySelector('input[type=search]');
+            if (input) {
+                input.addEventListener('input', this.debounce(this.fetchResults.bind(this), 300));
+            }
+        },
+        debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        },
+        fetchResults(event) {
+            const query = event.target.value;
+            if (!query || query.length < 2) return;
+
+            fetch('/sandipsearchoverlay/search/ajax?q=' + encodeURIComponent(query))
+                .then(res => res.json())
+                .then(data => {
+                    this.matches = data;
+                    document.getElementById('quick-search-overlay').classList.remove('hidden');
+                });
+        },
+        applySuggestion(suggestion) {
+            const input = document.querySelector('input[type=search]');
+            if (input) {
+                input.value = suggestion;
+                this.fetchResults({ target: input });
+            }
+        }
+    }))
+});
+</script>
