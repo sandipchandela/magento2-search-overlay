@@ -12,7 +12,7 @@ This is a basic search overlay for Hyvä Theme built in Magento 2.
 ## Run regular commands
 
 ```
-composer require sandip/search-overlay
+composer require sandipchandela/search-overlay
 bin/magento setup:upgrade
 bin/magento setup:di:compile
 bin/magento setup:static-content:deploy -s
