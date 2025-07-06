@@ -3,5 +3,12 @@
     <module 
 		name="Sandip_SearchOverlay" 
 		setup_version="1.0.0"
-	/>
+	>
+	<sequence>
+        <module name="Magento_Framework"/>
+		<module name="Magento_Catalog"/>
+		<module name="Magento_Cms"/>
+		<module name="Magento_Search"/>
+	 </sequence>
+	</module>
 </config>

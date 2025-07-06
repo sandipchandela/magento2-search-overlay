@@ -2,7 +2,11 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="page.top">
-            <block class="Magento\Framework\View\Element\Template" name="hyva.quicksearch.overlay" template="Sandip_SearchOverlay::overlay.phtml"/>
+            <block class="Magento\Framework\View\Element\Template" name="hyva.quicksearch.overlay" template="Sandip_SearchOverlay::overlay.phtml">
+			<arguments>
+                    <argument name="viewModel" xsi:type="object">Sandip\SearchOverlay\ViewModel\Overlay</argument>
+                </arguments>
+			</block>
         </referenceContainer>
     </body>
 </page>
