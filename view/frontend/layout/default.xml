@@ -3,7 +3,10 @@
     <body>
         <referenceContainer name="page.top">
 			<!-- WIP: To be add -->
-            <block class="Magento\Framework\View\Element\Template" name="quicksearch.overlay" template="Sandip_SearchOverlay::overlay.phtml">
+            <block class="Magento\Framework\View\Element\Template" 
+			ifconfig="sandipsearchoverlay/settings/enabled"
+			name="quicksearch.overlay" 
+			template="Sandip_SearchOverlay::overlay.phtml">
 			<arguments>
 				<argument name="viewModel" xsi:type="object">Sandip\SearchOverlay\ViewModel\Overlay</argument>
                 </arguments>

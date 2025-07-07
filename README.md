@@ -1,18 +1,18 @@
-# Magento 2: Search Overlay for Hyvä Theme
+# Magento 2: Search Overlay for Magento 2
 
 ## Overview
 
-This is a basic search overlay for Hyvä Theme built in Magento 2.
+This is a basic search overlay for default theme and Hyvä Theme built in Magento 2.
 
 ## Prerequisites
 
-- PHP 8.0
+- PHP 7.4 or later
 
 
 ## Run regular commands
 
 ```
-composer require sandipchandela/search-overlay
+composer require sandipchandela/magento2-search-overlay
 bin/magento setup:upgrade
 bin/magento setup:di:compile
 bin/magento setup:static-content:deploy -s

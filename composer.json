@@ -1,12 +1,12 @@
 {
-  "name": "sandipchandela/search-overlay",
-  "description": "Quick Search Overlay for Hyvä Theme",
+  "name": "sandipchandela/magento2-search-overlay",
+  "description": "Quick Search Overlay for default theme and Hyvä Theme",
   "require": {
-    "php": ">=8.1"
+    "php": ">=7.4"
   },
   "type": "magento2-module",
   "license": "MIT",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "authors": [
         {
             "name": "sandip chandela",
