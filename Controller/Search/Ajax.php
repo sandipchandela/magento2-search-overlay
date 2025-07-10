@@ -1,5 +1,6 @@
 <?php
-namespace Hyva\QuickSearchOverlay\Controller\Search;
+
+namespace Sandip\SearchOverlay\Controller\Search;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
@@ -35,21 +36,24 @@ class Ajax extends Action
 
     public function execute()
     {
-        $query = $this->getRequest()->getParam('q');
-        $result = $this->jsonFactory->create();
+        $query = trim($this->getRequest()->getParam('q'));
+        $searchQuery = $this->queryFactory->get();
+        $searchQuery->setQueryText($query);
+        $minQueryLength = $searchQuery->getMinQueryLength();
 
-        if (!$query) {
+        $result = $this->jsonFactory->create();
+        if (!$query || strlen($query) < $minQueryLength) {
             return $result->setData([]);
         }
 
-        // Fetch matching products
         $productCollection = $this->productCollectionFactory->create();
         $productCollection->addAttributeToSelect(['name', 'sku', 'price', 'image']);
-        $productCollection->addAttributeToFilter([
+        /*$productCollection->addAttributeToFilter([
             ['attribute' => 'name', 'like' => '%' . $query . '%'],
-            ['attribute' => 'sku', 'like' => '%' . $query . '%']
-        ]);
+            ['attribute' => 'sku', 'like' => '%' . $query . '%'],
+        ]);*/
         $productCollection->setPageSize(6);
+        //echo $productCollection->getSelect()->__toString(); // Debugging line to see the SQL query
 
         $products = [];
         foreach ($productCollection as $product) {
@@ -58,45 +62,48 @@ class Ajax extends Action
                 'name' => $product->getName(),
                 'sku' => $product->getSku(),
                 'price' => $product->getPrice(),
-                'image' => $product->getMediaConfig()->getMediaUrl($product->getImage())
+                'url' => $product->getProductUrl(),
+                //'image' => $this->imageHelper->init($product, 'product_base_image')->getUrl(),
             ];
         }
 
         // Fetch CMS pages
         $cmsPages = $this->pageCollectionFactory->create()
-            ->addFieldToFilter('title', ['like' => '%' . $query . '%']);
+            ->addFieldToFilter('title', ['like' => '%' . $query . '%'])
+            ->addFieldToFilter('content_heading', ['like' => '%' . $query . '%'])
+            ->addFieldToFilter('content', ['like' => '%' . $query . '%']);
         $pages = [];
         foreach ($cmsPages as $page) {
             $pages[] = [
                 'id' => $page->getId(),
                 'title' => $page->getTitle(),
-                'url' => '/' . $page->getIdentifier()
+                'url' => '/' . ltrim($page->getIdentifier(), '/'),
             ];
         }
 
-        // Fetch categories
         $categoriesCollection = $this->categoryCollectionFactory->create();
         $categoriesCollection->addAttributeToSelect('name');
-        $categoriesCollection->addAttributeToFilter('name', ['like' => '%' . $query . '%']);
+        $categoriesCollection->addFieldToFilter('name', ['like' => '%' . $query . '%'])
+            //->addFieldToFilter('description', ['like' => '%' . $query . '%'])
+        ;
+
+
         $categories = [];
         foreach ($categoriesCollection as $category) {
             $categories[] = [
                 'id' => $category->getId(),
                 'name' => $category->getName(),
-                'url' => '/catalog/category/view/id/' . $category->getId()
+                'url' => '/catalog/category/view/id/' . $category->getId(),
             ];
         }
 
-        // Fetch suggestions from query table
-        $searchQuery = $this->queryFactory->get();
-        $searchQuery->setQueryText($query)->prepare();
         $suggestions = [$searchQuery->getQueryText()];
 
         return $result->setData([
             'products' => $products,
             'pages' => $pages,
             'categories' => $categories,
-            'suggestions' => $suggestions
+            'suggestions' => $suggestions,
         ]);
     }
 }
