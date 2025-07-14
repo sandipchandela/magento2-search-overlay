@@ -1,24 +1,24 @@
 {
-  "name": "sandipchandela/magento2-search-overlay",
-  "description": "Quick Search Overlay for default theme and Hyvä Theme",
-  "require": {
-    "php": ">=7.4"
-  },
-  "type": "magento2-module",
-  "license": "MIT",
-  "version": "1.0.2",
-  "authors": [
+    "name": "sandipchandela/magento2-search-overlay",
+    "description": "Quick Search Overlay for default theme and Hyvä Theme",
+    "require": {
+        "php": ">=7.4"
+    },
+    "type": "magento2-module",
+    "license": "MIT",
+    "version": "1.0.3",
+    "authors": [
         {
             "name": "sandip chandela",
             "role": "Developer"
         }
-  ],
-  "autoload": {
-    "files": [
-      "registration.php"
     ],
-    "psr-4": {
-      "Sandip\\SearchOverlay\\": ""
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Sandip\\SearchOverlay\\": ""
+        }
     }
-  }
 }

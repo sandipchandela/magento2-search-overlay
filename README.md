@@ -18,5 +18,17 @@ bin/magento setup:di:compile
 bin/magento setup:static-content:deploy -s
 ```
 
-## Composer commands 
-- 
+## For Injecting 3rd Party Collection
+
+```
+di.xml
+```
+```xml
+<type name="Sandip\SearchOverlay\Model\SearchServicePool">
+    <arguments>
+        <argument name="services" xsi:type="array">
+            <item name="faqs" xsi:type="object">Vendor\FaqOverlay\Service\FaqService</item>
+        </argument>
+    </arguments>
+</type>
+```
