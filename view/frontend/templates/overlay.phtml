@@ -94,7 +94,7 @@ $helper = $this->helper(SearchHelper::class);
 </script>
 
 
-<div x-data="customSearchOverlay()" @keydown.window.escape="closeOverlay()">
+<div x-data="customSearchOverlay()" class="sc-search-overlay" @keydown.window.escape="closeOverlay()">
     <div class="container py-2 mx-auto text-black">
         <form class="form minisearch" id="search_mini_form" x-ref="form" @submit.prevent="search()"
               action="<?= $escaper->escapeUrl($helper->getResultUrl()) ?>" method="get" role="search">
